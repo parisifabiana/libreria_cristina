@@ -12,5 +12,6 @@ return [
     'max'                  => [
         'string' => 'Il campo :attribute non può contenere più di :max caratteri.',
     ],
+    'anno' => "l' :anno non può essere più grande del :Y.'",
     // Aggiungete altri messaggi
 ];

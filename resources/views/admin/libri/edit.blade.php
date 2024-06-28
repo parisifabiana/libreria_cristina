@@ -31,22 +31,31 @@
         </div>
         @endif
         </div>
-        <div class="form-group">
-            <label for="autore_id">Autore</label>
-            <input type="text" class="form-control" id="autore_id" name="autore_id" value="{{ $libro->autore_id}}" required>
+        <div class="mb-3">
+            <label for="autore_id" class="form-label">Autore</label>
+            <select name="autore_id" id="autore_id" class="form-control" required>
+                @foreach($autori as $autore)
+                    <option value="{{ $autore->id }}" {{ $libro->autore_id == $autore->id ? 
+                    'selected' : '' }}>{{ $autore->nome }} {{ $autore->cognome }}</option>
+                @endforeach
+            </select>
             @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
         </div>
-        <div class="form-group">
-            <label for="editore_id">Editore</label>
-            <input type="text" class="form-control" id="editore_id" name="editore_id" value="{{ $libro->editore_id}}" required>
+        <div class="mb-3">
+            <label for="editore_id" class="form-label">Autore</label>
+            <select name="editore_id" id="editore_id" class="form-control" required>
+                @foreach($editori as $editore)
+                    <option value="{{ $editore->id }}" {{ $libro->editore_id == $editore->id ? 'selected' : '' }}>{{ $editore->denominazione}}</option>
+                @endforeach
+            </select>
             @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -109,10 +118,23 @@
             </div>
         @endif
         </div>
-        <button type="submit" class="btn btn-primary">
-            Invia
-        </button>   
-    </form>
+        <div class="form-group">
+            <label for="categorias">Categorie</label><br>
+            @foreach($categorie as $categoria)
+                <input type="checkbox" id="categoria_{{ $categoria->id }}" name="category[]" value="{{ $categoria->id }}" {{ $libro->category->contains($categoria->id) ? 'checked' : '' }}>
+                <label for="categoria_{{ $categoria->id }}">{{ $categoria->nome }}</label><br>
+            @endforeach
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        </div>       
+        <button type="submit" class="btn btn-primary">Invia</button>
+      </form>
 </div>
-
 @endsection

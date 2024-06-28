@@ -91,7 +91,10 @@ class LibroController extends Controller
     public function edit(string $id)
     {
         $libro = Libro::find($id);
-        return view('admin.libri.edit', compact('libro'));
+        $autori = Autore::all();
+        $editori = Editore::all();
+        $categorie = Categoria::all();
+        return view('admin.libri.edit', compact('libro', 'autori', 'editori', 'categorie'));
     }
 
     /**
@@ -99,18 +102,26 @@ class LibroController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request->validate([
-            'titolo' => 'required|string|min:3|max:255',
-            'autore_id' => 'required',
-            'editore_id' => 'required',
-            'isbn' => 'required|string|max:20',
-            'anno' => 'required|integer|min:1970|max:' . date('Y'),
-            'lingua' => 'required|string|max:2',
-            'prezzo' => 'required|numeric'
-        ]);
+        // $request->validate([
+        //     'titolo' => 'required|string|min:3|max:255',
+        //     'autore_id' => 'required',
+        //     'editore_id' => 'required',
+        //     'isbn' => 'required|string|max:20',
+        //     'anno' => 'required|integer|min:1970|max:' . date('Y'),
+        //     'lingua' => 'required|string|max:2',
+        //     'prezzo' => 'required|numeric'
+        // ]);
+
+        //Validazione dei dati
+        $validatedData = $this->validateData($request);
+        //aggiornamento dei dati del libro con quelli validati
 
         $libro = Libro::find($id);
-        $libro->update($request->all());
+        $libro->update($validatedData);
+        //$libro->update($request->all());
+
+        //Aggiornamento delle categorie
+        $libro->category()->sync($request->category);
 
         return redirect()->route('admin.libri.index');
     }
@@ -120,6 +131,8 @@ class LibroController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $libro = Libro::find($id);
+        $libro->delete();
+        return redirect()->route('admin.libri.index');
     }
 }

@@ -22,8 +22,10 @@
         <td> {{$libro->prezzo}} </td>
         <td>
           <a href="{{route('admin.libri.edit', $libro->id)}}">Modifica</a>
-          <form action="">
-            <input type="submit" value="Cancella">
+          <form action="{{ route('admin.libri.destroy', $libro->id)}}" method="post">
+            @csrf
+            @method('delete')
+            <input type="submit" value="Cancella" onclick="return confirm('Sei sicuro di cancellare?')">
           </form>
         </td>
       </tr>
